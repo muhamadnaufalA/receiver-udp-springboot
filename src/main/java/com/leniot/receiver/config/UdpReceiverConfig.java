@@ -12,8 +12,10 @@ import org.springframework.messaging.MessageHandler;
 
 import com.leniot.receiver.service.DptService;
 import com.leniot.receiver.service.GllService;
+import com.leniot.receiver.service.VtgService;
 import com.leniot.receiver.model.DptModel;
 import com.leniot.receiver.model.GllModel;
+import com.leniot.receiver.model.VtgModel;
 
 import java.nio.charset.StandardCharsets;
 
@@ -26,6 +28,9 @@ public class UdpReceiverConfig {
 
     @Autowired
     private GllService gllService;
+
+    @Autowired
+    private VtgService vtgService;
 
     @Bean
     public MessageChannel udpInboundChannel() {
@@ -57,6 +62,13 @@ public class UdpReceiverConfig {
                 try {
                     GllModel gllData = gllService.decode(payload);
                     System.out.println("Decoded GLL data: " + gllData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("VTG")) {
+                try {
+                    VtgModel vtgData = vtgService.decode(payload);
+                    System.out.println("Decoded VTG data: " + vtgData + "\n");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Failed to decode message: " + e.getMessage() + "\n");
                 }
