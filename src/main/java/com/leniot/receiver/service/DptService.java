@@ -17,11 +17,9 @@ public class DptService {
                 throw new IllegalArgumentException("Incomplete DPT message");
             }
 
-            String depth = parts[1];
-            String offset = parts[2];
-            String maxLengthScale = parts[3];
-
-            return new DptModel(depth, offset, maxLengthScale);
+            DptModel dptModel = new DptModel(parts[1], parts[2], parts[3]);
+            return new DptModel(dptModel.getDepth(), dptModel.getOffset(), dptModel.getMaxLengthScale());
+            
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Error parsing DPT message: " + e.getMessage(), e);
         }
