@@ -13,11 +13,11 @@ public class VtgService {
 
         try {
             String[] parts = nmeaMessage.split("[,*]");
-            if (parts.length < 5) {
+            if (parts.length < 9) {
                 throw new IllegalArgumentException("Incomplete VTG message");
             }
 
-            VtgModel vtgModel = new VtgModel(parts[1], parts[2], parts[3], parts[4], parts[5]);
+            VtgModel vtgModel = new VtgModel(parts[1], parts[3], parts[5], parts[7], parts[9]);
             return new VtgModel(vtgModel.getCogTrue(), vtgModel.getCogMagnetic(), vtgModel.getSogKnots(), vtgModel.getSogKmhr(), vtgModel.getModeIndicator());
 
         } catch (IllegalArgumentException e) {
