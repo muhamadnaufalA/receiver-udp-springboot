@@ -13,12 +13,12 @@ public class MwvService {
 
         try {
             String[] parts = nmeaMessage.split("[,*]");
-            if (parts.length < 3) {
+            if (parts.length < 5) {
                 throw new IllegalArgumentException("Incomplete DPT message");
             }
 
-            MwvModel mwvModel = new MwvModel(parts[1], parts[2], parts[3], parts[4]);
-            return new MwvModel(mwvModel.getWindAngle(), mwvModel.getReference(), mwvModel.getWindSpeed(), mwvModel.getWindSpeedUnit());
+            MwvModel mwvModel = new MwvModel(parts[1], parts[2], parts[3], parts[4], parts[5]);
+            return new MwvModel(mwvModel.getWindAngle(), mwvModel.getReference(), mwvModel.getWindSpeed(), mwvModel.getWindSpeedUnit(), mwvModel.getStatus());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Error parsing DPT message: " + e.getMessage(), e);
         }

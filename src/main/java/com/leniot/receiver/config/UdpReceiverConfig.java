@@ -14,10 +14,12 @@ import com.leniot.receiver.service.DptService;
 import com.leniot.receiver.service.GllService;
 import com.leniot.receiver.service.VtgService;
 import com.leniot.receiver.service.MwvService;
+import com.leniot.receiver.service.RmcService;
 import com.leniot.receiver.model.DptModel;
 import com.leniot.receiver.model.GllModel;
 import com.leniot.receiver.model.VtgModel;
 import com.leniot.receiver.model.MwvModel;
+import com.leniot.receiver.model.RmcModel;
 
 import java.nio.charset.StandardCharsets;
 
@@ -36,6 +38,9 @@ public class UdpReceiverConfig {
 
     @Autowired
     private MwvService mwvService;
+
+    @Autowired
+    private RmcService rmcService;
 
     @Bean
     public MessageChannel udpInboundChannel() {
@@ -81,6 +86,13 @@ public class UdpReceiverConfig {
                 try {
                     MwvModel mwvData = mwvService.decode(payload);
                     System.out.println("Decoded MWV data: " + mwvData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("RMC")) {
+                try {
+                    RmcModel rmcData = rmcService.decode(payload);
+                    System.out.println("Decoded RMC data: " + rmcData + "\n");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Failed to decode message: " + e.getMessage() + "\n");
                 }

@@ -13,7 +13,7 @@ public class VtgService {
 
         try {
             String[] parts = nmeaMessage.split("[,*]");
-            if (parts.length < 3) {
+            if (parts.length < 5) {
                 throw new IllegalArgumentException("Incomplete VTG message");
             }
 

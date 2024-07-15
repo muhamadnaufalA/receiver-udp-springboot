@@ -13,13 +13,13 @@ public class GllService {
 
         try {
             String[] parts = nmeaMessage.split("[,*]");
-            if (parts.length < 3) {
+            if (parts.length < 7) {
                 throw new IllegalArgumentException("Incomplete GLL message");
             }
 
             GllModel gllModel = new GllModel(parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]);
             return new GllModel(gllModel.getLatitude(), gllModel.getLatitudePosition(), gllModel.getLongitude(), gllModel.getLongitudePosition(), gllModel.getUtcOfPosition(), gllModel.getStatus(), gllModel.getModeIndicator());
-            
+
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Error parsing DPT message: " + e.getMessage(), e);
         }
