@@ -33,7 +33,9 @@ public class UdpReceiverConfig {
         return message -> {
             byte[] payloadBytes = (byte[]) message.getPayload();
             String payload = new String(payloadBytes, StandardCharsets.UTF_8);
-            System.out.println("Received UDP message: " + payload);
+            if (payload.toUpperCase().contains("DPT")) {
+                System.out.println("Received NMEA DPT message: " + payload);
+            } 
         };
     }
 }
