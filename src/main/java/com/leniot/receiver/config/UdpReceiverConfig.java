@@ -13,9 +13,11 @@ import org.springframework.messaging.MessageHandler;
 import com.leniot.receiver.service.DptService;
 import com.leniot.receiver.service.GllService;
 import com.leniot.receiver.service.VtgService;
+import com.leniot.receiver.service.MwvService;
 import com.leniot.receiver.model.DptModel;
 import com.leniot.receiver.model.GllModel;
 import com.leniot.receiver.model.VtgModel;
+import com.leniot.receiver.model.MwvModel;
 
 import java.nio.charset.StandardCharsets;
 
@@ -31,6 +33,9 @@ public class UdpReceiverConfig {
 
     @Autowired
     private VtgService vtgService;
+
+    @Autowired
+    private MwvService mwvService;
 
     @Bean
     public MessageChannel udpInboundChannel() {
@@ -69,6 +74,13 @@ public class UdpReceiverConfig {
                 try {
                     VtgModel vtgData = vtgService.decode(payload);
                     System.out.println("Decoded VTG data: " + vtgData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("MWV")) {
+                try {
+                    MwvModel mwvData = mwvService.decode(payload);
+                    System.out.println("Decoded MWV data: " + mwvData + "\n");
                 } catch (IllegalArgumentException e) {
                     System.out.println("Failed to decode message: " + e.getMessage() + "\n");
                 }
