@@ -11,17 +11,6 @@ import com.leniot.receiver.model.MwdModel;
 import com.leniot.receiver.model.PanzhrpModel;
 import com.leniot.receiver.model.WixdrModel; 
 
-import com.leniot.receiver.service.HdtService;
-import com.leniot.receiver.service.MwdService;
-import com.leniot.receiver.service.VhwService;
-import com.leniot.receiver.service.WixdrService;
-import com.leniot.receiver.service.PanzhrpService;
-import com.leniot.receiver.model.HdtModel;
-import com.leniot.receiver.model.VhwModel;
-import com.leniot.receiver.model.MwdModel;
-import com.leniot.receiver.model.PanzhrpModel;
-import com.leniot.receiver.model.WixdrModel; 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
