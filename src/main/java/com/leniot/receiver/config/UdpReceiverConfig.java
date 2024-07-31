@@ -122,8 +122,7 @@ public class UdpReceiverConfig {
                 } catch (Exception e) {
                     System.err.println("Invalid NMEA data: " + payload);
                 }
-            }
-            if (payload.toUpperCase().contains("DPT")) {
+            }else if (payload.toUpperCase().contains("DPT")) {
                 try {
                     DptModel dptData = dptService.decode(payload);
                     System.out.println("Decoded DPT data: " + dptData + "\n");
@@ -158,10 +157,7 @@ public class UdpReceiverConfig {
                 } catch (IllegalArgumentException e) {
                     System.out.println("Failed to decode message: " + e.getMessage() + "\n");
                 }
-            } else {
-                System.out.println("Unknown message type\n");
-            }
-            
+            } 
         };
     }
 }
