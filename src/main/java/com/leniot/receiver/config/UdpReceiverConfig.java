@@ -11,6 +11,18 @@ import com.leniot.receiver.model.MwdModel;
 import com.leniot.receiver.model.PanzhrpModel;
 import com.leniot.receiver.model.WixdrModel; 
 
+import com.leniot.receiver.service.HdtService;
+import com.leniot.receiver.service.MwdService;
+import com.leniot.receiver.service.VhwService;
+import com.leniot.receiver.service.WixdrService;
+import com.leniot.receiver.service.PanzhrpService;
+import com.leniot.receiver.model.HdtModel;
+import com.leniot.receiver.model.VhwModel;
+import com.leniot.receiver.model.MwdModel;
+import com.leniot.receiver.model.PanzhrpModel;
+import com.leniot.receiver.model.WixdrModel; 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -20,11 +32,37 @@ import org.springframework.integration.ip.udp.UnicastReceivingChannelAdapter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+import com.leniot.receiver.service.DptService;
+import com.leniot.receiver.service.GllService;
+import com.leniot.receiver.service.VtgService;
+import com.leniot.receiver.service.MwvService;
+import com.leniot.receiver.service.RmcService;
+import com.leniot.receiver.model.DptModel;
+import com.leniot.receiver.model.GllModel;
+import com.leniot.receiver.model.VtgModel;
+import com.leniot.receiver.model.MwvModel;
+import com.leniot.receiver.model.RmcModel;
+
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableIntegration
 public class UdpReceiverConfig {
+
+    @Autowired
+    private DptService dptService;
+
+    @Autowired
+    private GllService gllService;
+
+    @Autowired
+    private VtgService vtgService;
+
+    @Autowired
+    private MwvService mwvService;
+
+    @Autowired
+    private RmcService rmcService;
 
     private final HdtService hdtService;
     private final VhwService vhwService;
@@ -48,7 +86,7 @@ public class UdpReceiverConfig {
     @Bean
     public UnicastReceivingChannelAdapter udpInboundAdapter() {
         UnicastReceivingChannelAdapter adapter = new UnicastReceivingChannelAdapter(9876);
-        adapter.setOutputChannel(   udpInboundChannel());
+        adapter.setOutputChannel(udpInboundChannel());
         return adapter;
     }
 
@@ -96,6 +134,45 @@ public class UdpReceiverConfig {
                     System.err.println("Invalid NMEA data: " + payload);
                 }
             }
+            if (payload.toUpperCase().contains("DPT")) {
+                try {
+                    DptModel dptData = dptService.decode(payload);
+                    System.out.println("Decoded DPT data: " + dptData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("GLL")) {
+                try {
+                    GllModel gllData = gllService.decode(payload);
+                    System.out.println("Decoded GLL data: " + gllData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("VTG")) {
+                try {
+                    VtgModel vtgData = vtgService.decode(payload);
+                    System.out.println("Decoded VTG data: " + vtgData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("MWV")) {
+                try {
+                    MwvModel mwvData = mwvService.decode(payload);
+                    System.out.println("Decoded MWV data: " + mwvData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else if (payload.toUpperCase().contains("RMC")) {
+                try {
+                    RmcModel rmcData = rmcService.decode(payload);
+                    System.out.println("Decoded RMC data: " + rmcData + "\n");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Failed to decode message: " + e.getMessage() + "\n");
+                }
+            } else {
+                System.out.println("Unknown message type\n");
+            }
+            
         };
     }
 }
